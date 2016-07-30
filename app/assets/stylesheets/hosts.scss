@@ -50,6 +50,9 @@
 	display: none;
 }
 
-.alerts-panel {
-	display: none;
+.form-group:not(.has-error)
+{
+	.help-block {
+		display: none;
+	}
 }

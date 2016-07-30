@@ -19,31 +19,31 @@ function onSaveCouch(event)
 
 	var $button = $(event.target);
 	var $couchInformation = $button.parents('.couch-information');
-	var $alertsPanel = $couchInformation.find('.alerts-panel');
 
-	$alertsPanel.children().remove();
-	$alertsPanel.hide();
+	$couchInformation.find('.form-group').removeClass('has-error');
 
-	var description = $couchInformation.find('.j-description-input').val();
-	var adminCode = $couchInformation.find('.j-code-input').val();
+	var $descriptionInput = $couchInformation.find('.j-description-input');
+	var $adminCodeInput = $couchInformation.find('.j-code-input');
+
+	var description = $descriptionInput.val();
+	var adminCode = $adminCodeInput.val();
 	var comments = $couchInformation.find('.j-comments-input').val();
 
 	var hasErrors = false;
 	if (!description)
 	{
-		$('<p>You must provide a description for your couch</p>').appendTo($alertsPanel);
+		$descriptionInput.parents('.form-group').addClass('has-error');
 		hasErrors = true;
 	}
 
 	if (!adminCode)
 	{
-		$('<p>You must enter your admin code</p>').appendTo($alertsPanel);
+		$adminCodeInput.parents('.form-group').addClass('has-error');
 		hasErrors = true;
 	}
 
 	if (hasErrors)
 	{
-		$alertsPanel.show();
 		return;
 	}
 
@@ -62,10 +62,13 @@ function onSaveCouch(event)
 	$.post('/couches?' + queryFilter)
 		.done(function(response)
 		{
-			if (response.error)
+			if (response.error && response.error == 'InvalidCode')
 			{
-				$('<p>' + response.error + '</p>').appendTo($alertsPanel);
-				$alertsPanel.show();
+				$adminCodeInput.parents('.form-group').addClass('has-error');
+			}
+			else if (response.error)
+			{
+				alert('An unknown error ocurred while saving the couch. Please try again.')
 			}
 		})
 		.fail(function ()
@@ -105,37 +108,41 @@ $(document).ready(function()
 
 		var $button = $(event.target);
 		var $modalBody = $button.parents('.modal-content').find('.modal-body');
-		var $alertsPanel = $modalBody.find('.alerts-panel');
-		$alertsPanel.children().remove();
-		$alertsPanel.hide();
 
-		var name = $modalBody.find('.j-name-input').val();
-		var email = $modalBody.find('.j-email-input').val();
-		var phone = $modalBody.find('.j-phone-input').val();
-		var adminCode = $modalBody.find('.j-code-input').val();
+		$modalBody.find('.form-group').removeClass('has-error');
+
+		var $nameInput = $modalBody.find('.j-name-input');
+		var $emailInput = $modalBody.find('.j-email-input');
+		var $phoneInput = $modalBody.find('.j-phone-input');
+		var $adminCodeInput = $modalBody.find('.j-code-input');
+
+		var name = $nameInput.val();
+		var email = $emailInput.val();
+		var phone = $phoneInput.val();
+		var adminCode = $adminCodeInput.val();
 
 		var hasErrors = false;
 		if (!name)
 		{
-			$('<p>You need to provide your name</p>').appendTo($alertsPanel);
+			$nameInput.parents('.form-group').addClass('has-error');
 			hasErrors = true;
 		}
 
 		if (!email && !phone)
 		{
-			$('<p>You need to provide an email or phone so that your occupants can contact you</p>').appendTo($alertsPanel);
+			$emailInput.parents('.form-group').addClass('has-error');
+			$phoneInput.parents('.form-group').addClass('has-error');
 			hasErrors = true;
 		}
 
 		if (!adminCode)
 		{
-			$('<p>You need an admin code to be able to edit your details afterwards</p>').appendTo($alertsPanel);
+			$adminCodeInput.parents('.form-group').addClass('has-error');
 			hasErrors = true;
 		}
 
 		if (hasErrors)
 		{
-			$alertsPanel.show();
 			return;
 		}
 

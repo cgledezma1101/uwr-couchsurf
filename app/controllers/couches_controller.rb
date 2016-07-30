@@ -3,7 +3,7 @@ class CouchesController < ApplicationController
 		host = Host.find(params[:host_id])
 		response = {};
 		if host.nil? || (host.admin_code != params[:admin_code])
-			response[:error] = 'Invalid admin code'
+			response[:error] = 'InvalidCode'
 		else
 			sanitized_params = params.permit(:description, :comments)
 			host.couches.create(sanitized_params)
