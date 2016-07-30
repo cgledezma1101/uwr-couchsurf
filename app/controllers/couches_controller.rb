@@ -14,6 +14,16 @@ class CouchesController < ApplicationController
 		end
 	end
 
+	def update
+		couch = Couch.find(params[:id])
+		sanitized_params = params.permit(:occupant_name, :occupant_phone, :occupant_email, :occupant_comments)
+		couch.update(sanitized_params)
+
+		respond_to do |format|
+			format.json { render json: { success: true }.to_json }
+		end
+	end
+
 	def destroy
 	end
 end

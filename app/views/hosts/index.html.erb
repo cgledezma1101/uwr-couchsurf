@@ -18,7 +18,7 @@
 			</div>
 			<div class="collapse" id="collapse<%= host.id %>">
 				<% host.couches.each do |couch| %>
-				<div class="couch-container">
+				<div class="couch-container" data-couch-id="<%= couch.id %>">
 					<div class="couch-information col-sm-6">
 						<h3 class="couch-information-title">Couch details</h2>
 						<form class="form-horizontal">
@@ -60,35 +60,36 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label">Name</label>
 								<div class="col-sm-10">
-									<input class="form-control" type="text" <%= couch.occupant_name.nil? ? '' : 'readonly=readonly' %> value="<%= couch.occupant_name %>" />
+									<input class="form-control j-name-input" type="text" <%= couch.occupant_name.nil? ? '' : 'readonly=readonly' %> value="<%= couch.occupant_name %>" />
 								</div>
 							</div>
 
 							<div class="form-group">
 								<label class="col-sm-2 control-label">Phone</label>
 								<div class="col-sm-10">
-									<input class="form-control" type="text" <%= couch.occupant_name.nil? ? '' : 'readonly=readonly' %> value="<%= couch.occupant_phone %>" />
+									<input class="form-control j-phone-input" type="text" <%= couch.occupant_name.nil? ? '' : 'readonly=readonly' %> value="<%= couch.occupant_phone %>" />
 								</div>
 							</div>
 
 							<div class="form-group">
 								<label class="col-sm-2 control-label">Email</label>
 								<div class="col-sm-10">
-									<input class="form-control" type="text" <%= couch.occupant_name.nil? ? '' : 'readonly=readonly' %> value="<%= couch.occupant_email %>" />
+									<input class="form-control j-email-input" type="text" <%= couch.occupant_name.nil? ? '' : 'readonly=readonly' %> value="<%= couch.occupant_email %>" />
 								</div>
 							</div>
 
 							<div class="form-group">
 								<label class="col-sm-2 control-label">Comments</label>
 								<div class="col-sm-10">
-									<textarea class="form-control" rows="5" <%= couch.occupant_name.nil? ? '' : 'readonly=readonly' %>><%= couch.occupant_name %></textarea>
+									<textarea class="form-control j-comments-input" rows="5" <%= couch.occupant_name.nil? ? '' : 'readonly=readonly' %>><%= couch.occupant_comments %></textarea>
 								</div>
 							</div>
 
 							<div class="form-group">
 								<div class="col-sm-offset-2 col-sm-10">
 									<% if couch.occupant_name.nil? %>
-									<button class="btn btn-primary">Claim</button>
+									<button class="btn btn-primary j-claim-couch-btn">Claim</button>
+									<%= image_tag "ajax-loader.gif", class: "ajax-loader" %>
 									<% end %>
 								</div>
 							</div>

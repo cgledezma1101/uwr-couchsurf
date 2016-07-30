@@ -1,3 +1,9 @@
+function toggleLoader($button)
+{
+	$button.toggle();
+	$button.siblings('.ajax-loader').toggle();
+}
+
 function getFilterFromParts(queryParts)
 {
 	return Object.keys(queryParts)
@@ -56,8 +62,7 @@ function onSaveCouch(event)
 
 	var queryFilter = getFilterFromParts(queryParts);
 
-	$button.hide();
-	$button.siblings('.ajax-loader').show();
+	toggleLoader($button);
 
 	$.post('/couches?' + queryFilter)
 		.done(function(response)
@@ -78,13 +83,68 @@ function onSaveCouch(event)
 		})
 		.always(function ()
 		{
-			$button.show();
-			$button.siblings('.ajax-loader').hide();
+			toggleLoader($button);
 		});
 }
 
 $(document).ready(function()
 {
+	$('.j-claim-couch-btn').on('click', function(event)
+	{
+			event.preventDefault();
+			event.stopPropagation();
+
+			var $button = $(event.target);
+			var couchId = $button.parents('.couch-container').data('couchId');
+
+			$informationContainer = $button.parents('.occupant-information');
+
+			$informationContainer.find('.form-group').removeClass('has-error');
+
+			var $nameInput = $informationContainer.find('.j-name-input');
+			var $phoneInput = $informationContainer.find('.j-phone-input');
+			var $emailInput = $informationContainer.find('.j-email-input');
+			var $commentsInput = $informationContainer.find('.j-comments-input');
+
+			var name= $nameInput.val();
+			var phone = $phoneInput.val();
+			var email = $emailInput.val();
+			var comments = $commentsInput.val();
+
+			var hasErrors = false;
+			if (!name)
+			{
+				$nameInput.parents('.form-group').addClass('has-error');
+				hasErrors = true;
+			}
+
+			if (!phone && !email)
+			{
+				$phoneInput.parents('.form-group').addClass('has-error');
+				$emailInput.parents('.form-group').addClass('has-error');
+				hasErrors = true;
+			}
+
+			if (hasErrors)
+			{
+				return;
+			}
+
+			var queryParts = {
+				occupant_name: name,
+				occupant_phone: phone,
+				occupant_email: email,
+				occupant_comments: comments
+			}
+			var queryFilter = getFilterFromParts(queryParts);
+
+			toggleLoader($button);
+			$.ajax({ url: '/couches/' + couchId + '?' + queryFilter, type: 'PUT' }).always(function()
+			{
+				toggleLoader($button);
+			})
+	});
+
 	$('.j-add-couch-btn').on('click', function(event)
 	{
 		event.preventDefault();
@@ -146,8 +206,7 @@ $(document).ready(function()
 			return;
 		}
 
-		$button.hide();
-		$button.siblings('.ajax-loader').show();
+		toggleLoader($button);
 
 		var queryParts = {
 			name: name,
@@ -169,8 +228,7 @@ $(document).ready(function()
 		})
 		.always(function()
 		{
-			$button.show();
-			$button.siblings('.ajax-loader').hide();
+			toggleLoader($button);
 		});
 	});
 });
