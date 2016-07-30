@@ -67,7 +67,7 @@ function onSaveCouch(event)
 	$.post('/couches?' + queryFilter)
 		.done(function(response)
 		{
-			if (response.error && response.error == 'InvalidCode')
+			if (response.error && response.error === 'InvalidCode')
 			{
 				$adminCodeInput.parents('.form-group').addClass('has-error');
 			}
@@ -92,6 +92,141 @@ function onSaveCouch(event)
 
 $(document).ready(function()
 {
+	$('.j-update-btn').on('click', function(event)
+	{
+		event.preventDefault();
+		event.stopPropagation();
+
+		var $button = $(event.target);
+		var $container = $button.parents('.couch-container');
+
+		$container.find('.form-group').removeClass('has-error');
+		var couchId = $container.data('couchId');
+
+		var $adminCodeInput = $container.find('.j-code-input');
+		var $descriptionInput = $container.find('.j-description-input');
+		var $commentsInput = $container.find('.j-comments-input');
+
+		var adminCode = $adminCodeInput.val();
+		var description = $descriptionInput.val();
+		var comments = $commentsInput.val();
+
+		if (!description)
+		{
+			$descriptionInput.parent('.form-group').addClass('has-error');
+			return;
+		}
+
+		var queryParts = {
+			admin_code: adminCode,
+			host_comments: comments,
+			description: description
+		};
+		var queryFilter = getFilterFromParts(queryParts);
+
+		toggleLoader($button);
+		$.ajax({ url: '/couches/' + couchId + '/update_details?' + queryFilter, type: 'PATCH' })
+			.done(function(response)
+			{
+				if (response.error && response.error == 'InvalidCode')
+				{
+					$adminCodeInput.parents('.form-group').addClass('has-error');
+				}
+				else
+				{
+					location.reload();
+				}
+			})
+			.fail(function()
+			{
+				alert('An unexpected error ocurred. Plase try again.');
+			})
+			.always(function()
+			{
+				toggleLoader($button);
+			});
+	});
+
+	$('.j-remove-btn').on('click', function(event)
+	{
+		event.preventDefault();
+		event.stopPropagation();
+
+		var $button = $(event.target);
+		var $container = $button.parents('.couch-container');
+		var couchId = $container.data('couchId');
+
+		var $adminCodeInput = $container.find('.j-code-input');
+		var adminCode = $adminCodeInput.val();
+
+		var queryParts = {
+			admin_code: adminCode
+		}
+		var queryFilter = getFilterFromParts(queryParts);
+
+		toggleLoader($button);
+		$.ajax({ url: '/couches/' + couchId + '?' + queryFilter, type: 'DELETE' })
+			.done(function(response)
+			{
+				if (response.error && response.error === 'InvalidCode')
+				{
+					$adminCodeInput.parents('.form-group').addClass('has-error');
+				}
+				else
+				{
+					location.reload();
+				}
+			})
+			.fail(function()
+			{
+				alert('An unexpected error ocurred when removing the occupant. Please try again.');
+			})
+			.always(function()
+			{
+				toggleLoader($button);
+			});
+	});
+
+	$('.j-vacate-btn').on('click', function(event)
+	{
+		event.preventDefault();
+		event.stopPropagation();
+
+		var $button = $(event.target);
+		var $container = $button.parents('.couch-container');
+		var couchId = $container.data('couchId');
+
+		var $adminCodeInput = $container.find('.j-code-input');
+		var adminCode = $adminCodeInput.val();
+
+		var queryParts = {
+			admin_code: adminCode
+		}
+		var queryFilter = getFilterFromParts(queryParts);
+
+		toggleLoader($button);
+		$.ajax({ url: '/couches/' + couchId + '/vacate?' + queryFilter, type: 'PUT' })
+			.done(function(response)
+			{
+				if (response.error && response.error === 'InvalidCode')
+				{
+					$adminCodeInput.parents('.form-group').addClass('has-error');
+				}
+				else
+				{
+					location.reload();
+				}
+			})
+			.fail(function()
+			{
+				alert('An unexpected error ocurred when removing the occupant. Please try again.');
+			})
+			.always(function()
+			{
+				toggleLoader($button);
+			});
+	});
+
 	$('.j-claim-couch-btn').on('click', function(event)
 	{
 			event.preventDefault();

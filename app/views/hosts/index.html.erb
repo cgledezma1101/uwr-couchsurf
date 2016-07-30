@@ -25,31 +25,32 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label">Description</label>
 								<div class="col-sm-10">
-									<input class="form-control" type="text" value="<%= couch.description %>" />
+									<input class="form-control j-description-input" type="text" value="<%= couch.description %>" />
 								</div>
 							</div>
 
 							<div class="form-group">
 								<label class="col-sm-2 control-label">Comments</label>
 								<div class="col-sm-10">
-									<textarea rows="5" class="from-control"><%= couch.host_comments %></textarea>
+									<textarea rows="5" class="from-control j-comments-input"><%= couch.host_comments %></textarea>
 								</div>
 							</div>
 
 							<div class="form-group">
 								<label class="col-sm-2 control-label">Admin code</label>
 								<div class="col-sm-10">
-									<input class="form-control" type="password" />
+									<input class="form-control j-code-input" type="password" />
 								</div>
 							</div>
 
 							<div class="form-group">
 								<div class="col-sm-offset-2 col-sm-10">
-									<button class="btn btn-primary">Update</button>
-									<button class="btn btn-danger">Remove couch</button>
+									<button class="btn btn-primary j-update-btn">Update</button>
+									<button class="btn btn-danger j-remove-btn">Remove couch</button>
 									<% if !couch.occupant_name.nil? %>
-									<button class="btn btn-danger">Remove occupant</button>
+									<button class="btn btn-danger j-vacate-btn">Remove occupant</button>
 									<% end %>
+									<%= image_tag "ajax-loader.gif", class: "ajax-loader" %>
 								</div>
 							</div>
 						</form>
