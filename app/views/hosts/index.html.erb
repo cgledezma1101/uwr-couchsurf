@@ -13,7 +13,7 @@
 					<span class="available-couches">
 						(<%= pluralize(host.available_couches.length, "available couch") %>)
 					</span>
-					<button class="btn btn-success add-couch" data-host-id="<%= host.id %>">Add couch</button>
+					<button class="btn btn-success add-couch j-add-couch-btn" data-host-id="<%= host.id %>">Add couch</button>
 				</h2>
 			</div>
 			<div class="collapse" id="collapse<%= host.id %>">
@@ -96,5 +96,5 @@
 <%= render "add_host.html.erb" %>
 
 <% content_for :page_javascript do %>
-	<%= render "index.js" %>
+	<%= render "index.js.erb" %>
 <% end %>

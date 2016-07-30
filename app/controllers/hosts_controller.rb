@@ -4,8 +4,8 @@ class HostsController < ApplicationController
 	end
 
 	def create
-		sanitizedParams = params.permit(:name, :email, :phone, :admin_code)
-		Host.create(sanitizedParams)
+		sanitized_params = params.permit(:name, :email, :phone, :admin_code)
+		Host.create(sanitized_params)
 	end
 
 	def destroy

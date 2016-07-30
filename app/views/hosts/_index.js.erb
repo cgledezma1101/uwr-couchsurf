@@ -1,0 +1,169 @@
+function getFilterFromParts(queryParts)
+{
+	return Object.keys(queryParts)
+		.filter(function (key)
+		{
+			return queryParts[key];
+		})
+		.map(function (key)
+		{
+			return key + '=' + queryParts[key];
+		})
+		.join('&');
+}
+
+function onSaveCouch(event)
+{
+	event.preventDefault();
+	event.stopPropagation();
+
+	var $button = $(event.target);
+	var $couchInformation = $button.parents('.couch-information');
+	var $alertsPanel = $couchInformation.find('.alerts-panel');
+
+	$alertsPanel.children().remove();
+	$alertsPanel.hide();
+
+	var description = $couchInformation.find('.j-description-input').val();
+	var adminCode = $couchInformation.find('.j-code-input').val();
+	var comments = $couchInformation.find('.j-comments-input').val();
+
+	var hasErrors = false;
+	if (!description)
+	{
+		$('<p>You must provide a description for your couch</p>').appendTo($alertsPanel);
+		hasErrors = true;
+	}
+
+	if (!adminCode)
+	{
+		$('<p>You must enter your admin code</p>').appendTo($alertsPanel);
+		hasErrors = true;
+	}
+
+	if (hasErrors)
+	{
+		$alertsPanel.show();
+		return;
+	}
+
+	var queryParts = {
+		description: description,
+		host_comments: comments,
+		admin_code: adminCode,
+		host_id: $couchInformation.data('hostId')
+	};
+
+	var queryFilter = getFilterFromParts(queryParts);
+
+	$button.hide();
+	$button.siblings('.ajax-loader').show();
+
+	$.post('/couches?' + queryFilter)
+		.done(function(response)
+		{
+			if (response.error)
+			{
+				$('<p>' + response.error + '</p>').appendTo($alertsPanel);
+				$alertsPanel.show();
+			}
+		})
+		.fail(function ()
+		{
+			$('<p>There was an error saving the new couch. Please try again</p>').appendTo($alertsPanel);
+			$alertsPanel.show();
+		})
+		.always(function ()
+		{
+			$button.show();
+			$button.siblings('.ajax-loader').hide();
+		});
+}
+
+$(document).ready(function()
+{
+	$('.j-add-couch-btn').on('click', function(event)
+	{
+		event.preventDefault();
+		event.stopPropagation();
+
+		var $button = $(event.target);
+		var hostId = $button.data("hostId");
+		var $newCouchForm = $("<%= j render 'couches/new' %>".replace('$hostId', hostId));
+		var $collapsePanel = $button.parents('.host-container').find('.collapse');
+		$collapsePanel.collapse('show');
+
+		$newCouchForm.prependTo($collapsePanel);
+		$collapsePanel.find('.j-save-couch-btn').on('click', onSaveCouch);
+	});
+
+	$('.j-add-host-btn').on('click', function(event)
+	{
+		event.preventDefault();
+		event.stopPropagation();
+
+
+		var $button = $(event.target);
+		var $modalBody = $button.parents('.modal-content').find('.modal-body');
+		var $alertsPanel = $modalBody.find('.alerts-panel');
+		$alertsPanel.children().remove();
+		$alertsPanel.hide();
+
+		var name = $modalBody.find('.j-name-input').val();
+		var email = $modalBody.find('.j-email-input').val();
+		var phone = $modalBody.find('.j-phone-input').val();
+		var adminCode = $modalBody.find('.j-code-input').val();
+
+		var hasErrors = false;
+		if (!name)
+		{
+			$('<p>You need to provide your name</p>').appendTo($alertsPanel);
+			hasErrors = true;
+		}
+
+		if (!email && !phone)
+		{
+			$('<p>You need to provide an email or phone so that your occupants can contact you</p>').appendTo($alertsPanel);
+			hasErrors = true;
+		}
+
+		if (!adminCode)
+		{
+			$('<p>You need an admin code to be able to edit your details afterwards</p>').appendTo($alertsPanel);
+			hasErrors = true;
+		}
+
+		if (hasErrors)
+		{
+			$alertsPanel.show();
+			return;
+		}
+
+		$button.hide();
+		$button.siblings('.ajax-loader').show();
+
+		var queryParts = {
+			name: name,
+			email: email,
+			phone: phone,
+			admin_code: adminCode
+		};
+
+		var queryFilter = getFilterFromParts(queryParts);
+
+		$.post('/hosts?' + queryFilter).done(function()
+		{
+			$button.parents('.modal').modal('hide');
+		})
+		.fail(function()
+		{
+			$('<p>There was an error saving the new host. Please try again</p>').appendTo($alertsPanel);
+			$alertsPanel.show();
+		})
+		.always(function()
+		{
+			$button.show();
+			$button.siblings('.ajax-loader').hide();
+		});
+	});
+});
