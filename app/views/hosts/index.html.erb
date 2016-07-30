@@ -1,6 +1,7 @@
 <div class="host-index">
 	<div class="title-container">
 		<h1 class="title">UWR Couch Surfing</h1>
+		<button class="btn btn-success add-host" data-toggle="modal" data-target="#addHostModal">Add host</button>
 	</div>
 
 	<div class="hosts-container">
@@ -12,6 +13,7 @@
 					<span class="available-couches">
 						(<%= pluralize(host.available_couches.length, "available couch") %>)
 					</span>
+					<button class="btn btn-success add-couch" data-host-id="<%= host.id %>">Add couch</button>
 				</h2>
 			</div>
 			<div class="collapse" id="collapse<%= host.id %>">
@@ -90,3 +92,9 @@
 		<% end %>
 	</div>
 </div>
+
+<%= render "add_host.html.erb" %>
+
+<% content_for :page_javascript do %>
+	<%= render "index.js" %>
+<% end %>

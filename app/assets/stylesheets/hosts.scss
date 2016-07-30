@@ -5,6 +5,12 @@
 	.title {
 		text-align: center;
 	}
+
+	.add-host {
+		position: absolute;
+		right: 30px;
+		top: 25px;
+	}
 }
 
 .hosts-container {
@@ -27,6 +33,10 @@
 			&:hover {
 				cursor: pointer;
 			}
+
+			.add-couch {
+				float: right;
+			}
 		}
 
 		.couch-container {
@@ -34,4 +44,12 @@
 			border-bottom: 1px solid black;
 		}
 	}
+}
+
+.ajax-loader {
+	display: none;
+}
+
+.alerts-panel {
+	display: none;
 }

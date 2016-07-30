@@ -1,0 +1,47 @@
+<div class="modal fade" id="addHostModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4>Add host</h4>
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-danger alerts-panel">
+				</div>
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Name</label>
+						<div class="col-sm-10">
+							<input class="form-control j-name-input" type="text" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Email</label>
+						<div class="col-sm-10">
+							<input class="form-control j-email-input" type="text" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Phone</label>
+						<div class="col-sm-10">
+							<input class="form-control j-phone-input" type="text" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Admin code</label>
+						<div class="col-sm-10">
+							<input class="form-control j-code-input" type="text" />
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-primary j-add-host-btn">Add</button>
+				<%= image_tag "ajax-loader.gif", class: "ajax-loader" %>
+			</div>
+		</div>
+	</div>
+</div>
