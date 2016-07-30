@@ -75,11 +75,14 @@ function onSaveCouch(event)
 			{
 				alert('An unknown error ocurred while saving the couch. Please try again.')
 			}
+			else
+			{
+				location.reload();
+			}
 		})
 		.fail(function ()
 		{
-			$('<p>There was an error saving the new couch. Please try again</p>').appendTo($alertsPanel);
-			$alertsPanel.show();
+			alert('An unknown error ocurred while saving the couch. Please try again.')
 		})
 		.always(function ()
 		{
@@ -139,10 +142,15 @@ $(document).ready(function()
 			var queryFilter = getFilterFromParts(queryParts);
 
 			toggleLoader($button);
-			$.ajax({ url: '/couches/' + couchId + '?' + queryFilter, type: 'PUT' }).always(function()
-			{
-				toggleLoader($button);
-			})
+			$.ajax({ url: '/couches/' + couchId + '/occupy?' + queryFilter, type: 'PUT' })
+				.done(function()
+				{
+					location.reload();
+				})
+				.always(function()
+				{
+					toggleLoader($button);
+				})
 	});
 
 	$('.j-add-couch-btn').on('click', function(event)
@@ -217,18 +225,18 @@ $(document).ready(function()
 
 		var queryFilter = getFilterFromParts(queryParts);
 
-		$.post('/hosts?' + queryFilter).done(function()
-		{
-			$button.parents('.modal').modal('hide');
-		})
-		.fail(function()
-		{
-			$('<p>There was an error saving the new host. Please try again</p>').appendTo($alertsPanel);
-			$alertsPanel.show();
-		})
-		.always(function()
-		{
-			toggleLoader($button);
-		});
+		$.post('/hosts?' + queryFilter)
+			.done(function()
+			{
+				location.reload();
+			})
+			.fail(function()
+			{
+				alert('An unknown error ocurred while saving the host. Please try again.')
+			})
+			.always(function()
+			{
+				toggleLoader($button);
+			});
 	});
 });

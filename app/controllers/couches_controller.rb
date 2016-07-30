@@ -14,7 +14,7 @@ class CouchesController < ApplicationController
 		end
 	end
 
-	def update
+	def occupy
 		couch = Couch.find(params[:id])
 		sanitized_params = params.permit(:occupant_name, :occupant_phone, :occupant_email, :occupant_comments)
 		couch.update(sanitized_params)
