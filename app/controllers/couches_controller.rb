@@ -5,9 +5,9 @@ class CouchesController < ApplicationController
 		if host.nil? || (host.admin_code != params[:admin_code])
 			response[:error] = 'InvalidCode'
 		else
-			sanitized_params = params.permit(:description, :comments)
+			sanitized_params = params.permit(:description, :host_comments)
 			host.couches.create(sanitized_params)
-			response[:success] = trues
+			response[:success] = true
 		end
 
 		respond_to do |format|
