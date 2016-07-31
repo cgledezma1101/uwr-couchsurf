@@ -16,6 +16,15 @@
 .hosts-container {
 	padding: 0 30px;
 
+	.host-details {
+		padding-top: 5px;
+		padding-left: 20px;
+		border-bottom-left-radius: 20px;
+		border-bottom-right-radius: 20px;
+		background-color: black;
+		color: white;
+	}
+
 	.host-container {
 		.host-header {
 			text-decoration: none;

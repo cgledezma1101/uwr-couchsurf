@@ -299,7 +299,7 @@ $(document).ready(function()
 		var $collapsePanel = $button.parents('.host-container').find('.collapse');
 		$collapsePanel.collapse('show');
 
-		$newCouchForm.prependTo($collapsePanel);
+		$newCouchForm.prependTo($collapsePanel.find('.host-couches'));
 		$collapsePanel.find('.j-save-couch-btn').on('click', onSaveCouch);
 	});
 
